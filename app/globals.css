@@ -1,0 +1,262 @@
+@import "tailwindcss";
+
+:root {
+  --bg-app: #FAFAFA;
+  --surface-white: #FFFFFF;
+  --surface-muted: #F4F4F5;
+  --border-subtle: #E4E4E7;
+  --border-strong: #D4D4D8;
+  --text-main: #09090B;
+  --text-muted: #52525B;
+  --text-light: #71717A;
+  --brand-primary: #09090B;
+  --brand-primary-hover: #27272A;
+  --brand-accent: #71717A;
+  --brand-dark: #09090B;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath d='M2 2 L7 1 L23 17 A 4 4 0 0 1 17 23 L 1 7 Z' fill='%23FFFFFF' stroke='%2318181B' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cpath d='M5 4 L20 19' stroke='%23E4E4E7' stroke-width='1.2' stroke-linecap='round'/%3E%3Ccircle cx='2' cy='2' r='1' fill='%2318181B'/%3E%3C/svg%3E") 2 2, auto;
+}
+
+/* Interactive Chalk Cursor for Clickable Elements */
+a, button, [role="button"], input[type="submit"], input[type="button"], .cursor-pointer {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Ccircle cx='3' cy='3' r='2.5' fill='%2309090B' opacity='0.15'/%3E%3Ccircle cx='3' cy='3' r='1.5' fill='%2318181B'/%3E%3Cpath d='M3 3 L8 2 L24 18 A 4 4 0 0 1 18 24 L 2 8 Z' fill='%23FFFFFF' stroke='%2318181B' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M6 5 L21 20' stroke='%23D4D4D8' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M3 3 L6 6' stroke='%2318181B' stroke-width='1'/%3E%3C/svg%3E") 3 3, pointer;
+}
+
+/* Native selection cursor for text entry */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+input[type="number"],
+textarea,
+[contenteditable="true"] {
+  cursor: text;
+}
+
+/* Soft Tactile Grain Texture Overlay for Light Theme */
+.chalk-grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='softGrainFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23softGrainFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: multiply;
+}
+
+/* Standard Clean Sans Typography - All variants point to crisp Inter sans */
+.font-heading {
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-serif-heading {
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-chalk-hand {
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Modern Card */
+.modern-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E4E4E7;
+  border-radius: 0.875rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modern-card:hover {
+  border-color: #D4D4D8;
+  box-shadow: 0 6px 16px -2px rgba(9, 9, 11, 0.05), 0 2px 6px -2px rgba(9, 9, 11, 0.03);
+}
+
+/* Primary Button - High-Contrast Minimalist Ink */
+.btn-primary {
+  background-color: #09090B;
+  color: #FFFFFF;
+  border: 1px solid #09090B;
+  font-weight: 600;
+  border-radius: 0.625rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  background-color: #27272A;
+  border-color: #27272A;
+  transform: translateY(-0.5px);
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary:active {
+  transform: translateY(0.5px);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: #18181B;
+  border: 1px solid #E4E4E7;
+  font-weight: 500;
+  border-radius: 0.625rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-secondary:hover {
+  background-color: #F4F4F5;
+  border-color: #D4D4D8;
+  color: #09090B;
+}
+
+.btn-secondary:hover {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* =========================================================================
+   CREATIVE AI STUDIO: RAINBOW IRIDESCENT GLOW & RADIANT PROCESSING ORB
+========================================================================== */
+
+@keyframes rainbowShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.rainbow-gradient {
+  background: linear-gradient(
+    135deg, 
+    #ff4b72 0%, 
+    #fca311 18%, 
+    #10b981 38%, 
+    #06b6d4 56%, 
+    #3b82f6 74%, 
+    #8b5cf6 88%, 
+    #ff4b72 100%
+  );
+  background-size: 300% 300%;
+  animation: rainbowShift 8s ease infinite;
+}
+
+.rainbow-glow {
+  filter: blur(28px);
+  opacity: 0.35;
+  transition: opacity 0.4s ease;
+}
+
+/* Radiant AI Processing Orb */
+@keyframes orbRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbPulse {
+  0%, 100% {
+    transform: scale(0.97);
+    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.4)) drop-shadow(0 0 40px rgba(236, 72, 153, 0.25));
+  }
+  50% {
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 35px rgba(59, 130, 246, 0.55)) drop-shadow(0 0 65px rgba(244, 63, 94, 0.45));
+  }
+}
+
+@keyframes orbCoreFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.02);
+  }
+}
+
+.ai-orb-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: orbCoreFloat 4s ease-in-out infinite;
+}
+
+.ai-orb-outer {
+  position: absolute;
+  inset: -12px;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #ff007a 0deg,
+    #7928ca 72deg,
+    #0070f3 144deg,
+    #00dfd8 216deg,
+    #ffdd00 288deg,
+    #ff007a 360deg
+  );
+  filter: blur(18px);
+  opacity: 0.65;
+  animation: orbRotate 6s linear infinite;
+}
+
+.ai-orb-middle {
+  position: absolute;
+  inset: 4px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.95), rgba(99, 102, 241, 0.7) 45%, rgba(15, 23, 42, 0.9) 85%);
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(99, 102, 241, 0.5);
+  animation: orbPulse 3.5s ease-in-out infinite;
+}
+
+.ai-orb-core {
+  position: relative;
+  z-index: 10;
+  width: 54px;
+  height: 54px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 30% 30%, #ffffff 10%, #e0e7ff 45%, #6366f1 90%);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.9);
+}
+

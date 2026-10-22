@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Environment variables & secrets (Never commit credentials)
+.env
+.env*.local
+.env.lc
+.env.production
+.env.staging
+backend/.env
+backend/.env*.local
+google-credentials.json
+*.pem
+*.key
+!.env.example
+!backend/.env.example
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Python virtual environment and cache
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+backend/__pycache__/
+backend/*/__pycache__/
+backend/*/*/__pycache__/
+
+# Local SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+chalkka_data.db
+backend/app/chalkka_data.db
+
+# Video render workspaces & local test outputs
+temp_render_workspace/
+backend/temp_render_workspace/
+backend/full_lesson_output/
+backend/full_nitrogen_output/
+backend/test_output/
+backend/static_storage/*.mp4
+!backend/static_storage/.gitkeep
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDEs & agent metadata
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.agents/
+/scratch
+.gemini/

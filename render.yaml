@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: chalkka-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: AI_PROVIDER
+        value: gemini
+      - key: TTS_PROVIDER
+        value: edge
+      - key: STORAGE_PROVIDER
+        value: cloudinary
+      - key: GOOGLE_GENERATIVE_AI_API_KEY
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false

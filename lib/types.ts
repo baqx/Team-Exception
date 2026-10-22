@@ -1,0 +1,68 @@
+export type SubjectId = 
+  | "electrical" 
+  | "maths" 
+  | "physics" 
+  | "chemistry" 
+  | "mechanical" 
+  | "computer_science";
+
+export type VideoLength = "short" | "standard" | "detailed";
+
+export interface SubjectOption {
+  id: SubjectId;
+  label: string;
+  iconName: string;
+  popularTopics: string[];
+  sampleProblem: string;
+}
+
+export interface ProblemGenerationRequest {
+  query: string;
+  subject: SubjectId;
+  length: VideoLength;
+  hasAttachment?: boolean;
+  attachmentName?: string;
+  userId?: string;
+}
+
+export interface LessonStep {
+  id: number;
+  title: string;
+  duration: string;
+  category: "prerequisite" | "concept" | "solution" | "verification";
+  boardContent: string[];
+  spokenScript: string;
+  latexSnippets: string[];
+}
+
+export interface GeneratedDemoLesson {
+  id: string;
+  title: string;
+  subject: string;
+  targetEquation: string;
+  estimatedDuration: string;
+  conceptDetected: string;
+  prerequisites: string[];
+  steps: LessonStep[];
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  credits: number;
+  created_at?: string;
+}
+
+export interface UserJob {
+  job_id: string;
+  user_id?: string;
+  query: string;
+  subject?: string;
+  length?: string;
+  status: "pending" | "analyzing" | "synthesizing_audio" | "rendering_video" | "stitching" | "completed" | "failed";
+  video_url?: string | null;
+  lesson_plan?: any | null;
+  created_at?: string;
+  completed_at?: string | null;
+}
