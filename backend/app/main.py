@@ -33,7 +33,7 @@ app.mount("/static", StaticFiles(directory=settings.LOCAL_STORAGE_DIR), name="st
 # Mount API routes
 app.include_router(api_router, prefix="/api")
 
-@app.get("/health", tags=["Health"])
+@app.api_route("/health", methods=["GET", "HEAD"], tags=["Health"])
 async def health_check():
     return {
         "status": "healthy",
@@ -46,7 +46,7 @@ async def health_check():
         }
     }
 
-@app.get("/", tags=["Root"])
+@app.api_route("/", methods=["GET", "HEAD"], tags=["Root"])
 async def root():
     return {
         "message": "Chalkka Video Generation API is active.",
