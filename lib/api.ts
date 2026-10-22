@@ -35,7 +35,7 @@ export interface JobStatus {
   error_message?: string;
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api/backend";
+const API_BASE = (process.env.NEXT_PUBLIC_API_URL || "/api/backend").replace(/\/$/, "");
 
 export interface StartGenerationResult {
   job_id: string;

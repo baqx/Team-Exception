@@ -30,8 +30,9 @@ app.add_middleware(
 os.makedirs(settings.LOCAL_STORAGE_DIR, exist_ok=True)
 app.mount("/static", StaticFiles(directory=settings.LOCAL_STORAGE_DIR), name="static")
 
-# Mount API routes
+# Mount API routes (support both /api/* and root /* endpoints)
 app.include_router(api_router, prefix="/api")
+app.include_router(api_router, prefix="")
 
 @app.api_route("/health", methods=["GET", "HEAD"], tags=["Health"])
 async def health_check():
