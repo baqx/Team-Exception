@@ -601,10 +601,7 @@ function DashboardContent() {
                   <p className="text-xs text-zinc-300 mt-0.5 line-clamp-1">
                     {generationStage || "Diagnosing prerequisites and deriving chalkboard scenes..."}
                   </p>
-                  <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 mt-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                    <span>Server rendering in background • You can safely close this tab or turn off your screen; your video will appear in My Lessons.</span>
-                  </div>
+                  
                 </div>
               </div>
 
@@ -621,7 +618,7 @@ function DashboardContent() {
                     onClick={() => setActiveTab("studio")}
                     className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold shrink-0 cursor-pointer transition-colors"
                   >
-                    View Studio Orb
+                    View Studio
                   </button>
                 )}
               </div>
@@ -743,7 +740,7 @@ function DashboardContent() {
                       </div>
                       <div className="p-2.5 rounded-xl bg-zinc-50 border border-zinc-200/80 text-zinc-700 flex items-center justify-center gap-1.5 font-medium">
                         <CheckCircle size={14} weight="fill" className="text-emerald-600" />
-                        <span>Equations Formatted</span>
+                        <span>Text Formatted</span>
                       </div>
                       <div className="p-2.5 rounded-xl bg-zinc-50 border border-zinc-200/80 text-zinc-700 flex items-center justify-center gap-1.5 font-medium">
                         <CircleNotch size={14} className="animate-spin text-zinc-900" />
@@ -751,7 +748,7 @@ function DashboardContent() {
                       </div>
                       <div className="p-2.5 rounded-xl bg-zinc-50 border border-zinc-200/80 text-zinc-700 flex items-center justify-center gap-1.5 font-medium">
                         <VideoCamera size={14} className="text-zinc-600" />
-                        <span>1080p MP4 Video</span>
+                        <span>MP4 Video</span>
                       </div>
                     </div>
 
