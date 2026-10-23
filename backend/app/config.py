@@ -18,7 +18,7 @@ _ENV_FILES = [
 
 class Settings(BaseSettings):
     APP_NAME: str = "Chalkka Backend API"
-    APP_ENV: str = "development"
+    APP_ENV: str = "production"
     DEBUG: bool = True
     PORT: int = 8000
 
