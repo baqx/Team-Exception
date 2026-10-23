@@ -34,7 +34,8 @@ import { useAuth } from "@/lib/auth-context";
 import { 
   fetchUserHistory, 
   startGenerationJob, 
-  pollJobUntilFinished 
+  pollJobUntilFinished,
+  fetchJobStatus
 } from "@/lib/api";
 import { UserJob, SubjectId, VideoLength } from "@/lib/types";
 import { AuthModal } from "@/components/auth-modal";
@@ -170,6 +171,64 @@ function DashboardContent() {
     loadHistory();
   }, [token]);
 
+  // Auto-resume active job if user refreshed or navigated back
+  useEffect(() => {
+    const activeJobId = typeof window !== "undefined" ? localStorage.getItem("active_chalkka_job_id") : null;
+    if (activeJobId && !isGenerating) {
+      fetchJobStatus(activeJobId)
+        .then((status) => {
+          if (status.status === "completed" || status.status === "failed") {
+            localStorage.removeItem("active_chalkka_job_id");
+            loadHistory();
+          } else {
+            setIsGenerating(true);
+            setGenerationStage(status.current_step_text || "Synthesizing chalkboard lesson on server...");
+            setProgressPercent(Math.max(20, status.progress_percent));
+            pollJobUntilFinished(
+              activeJobId,
+              (s) => {
+                setGenerationStage(s.current_step_text);
+                setProgressPercent(Math.max(20, s.progress_percent));
+              }
+            )
+              .then(() => {
+                localStorage.removeItem("active_chalkka_job_id");
+                setIsGenerating(false);
+                setProgressPercent(100);
+                loadHistory();
+                setActiveTab("archive");
+              })
+              .catch(() => {
+                localStorage.removeItem("active_chalkka_job_id");
+                setIsGenerating(false);
+                loadHistory();
+              });
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("active_chalkka_job_id");
+        });
+    }
+  }, [token]);
+
+  // Auto-refresh My Lessons tab while any job is pending on the server
+  useEffect(() => {
+    const hasPendingJobs = jobs.some(
+      (j) => j.status === "pending" || (!j.status?.includes("completed") && !j.status?.includes("failed"))
+    );
+    if (!hasPendingJobs || !token) return;
+
+    const pollTimer = setInterval(() => {
+      fetchUserHistory(token)
+        .then((res) => {
+          setJobs(res.jobs);
+        })
+        .catch(() => {});
+    }, 4000);
+
+    return () => clearInterval(pollTimer);
+  }, [jobs, token]);
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -234,6 +293,10 @@ function DashboardContent() {
         userId: user.id,
       });
 
+      if (typeof window !== "undefined") {
+        localStorage.setItem("active_chalkka_job_id", genResult.job_id);
+      }
+
       deductLocalCredits(5);
       refreshUser();
 
@@ -248,6 +311,10 @@ function DashboardContent() {
         }
       );
 
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("active_chalkka_job_id");
+      }
+
       setIsGenerating(false);
       setProgressPercent(100);
 
@@ -258,6 +325,9 @@ function DashboardContent() {
       setAttachment(null);
       setSelectedFile(null);
     } catch (err: any) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("active_chalkka_job_id");
+      }
       setIsGenerating(false);
       loadHistory();
       const errMsg = err?.message || "";
@@ -531,6 +601,10 @@ function DashboardContent() {
                   <p className="text-xs text-zinc-300 mt-0.5 line-clamp-1">
                     {generationStage || "Diagnosing prerequisites and deriving chalkboard scenes..."}
                   </p>
+                  <div className="flex items-center gap-1.5 text-[10px] text-zinc-400 mt-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                    <span>Server rendering in background • You can safely close this tab or turn off your screen; your video will appear in My Lessons.</span>
+                  </div>
                 </div>
               </div>
 
@@ -937,9 +1011,14 @@ function DashboardContent() {
                                 className="w-full h-full object-contain bg-black" 
                               />
                             ) : isPending ? (
-                              <div className="flex flex-col items-center gap-2 text-zinc-300">
-                                <CircleNotch size={22} className="animate-spin text-zinc-400" />
-                                <span className="text-xs font-medium">Rendering whiteboard video...</span>
+                              <div className="flex flex-col items-center gap-2 text-zinc-300 text-center px-4">
+                                <div className="flex items-center gap-2">
+                                  <CircleNotch size={20} className="animate-spin text-zinc-300" />
+                                  <span className="text-xs font-semibold text-white">Synthesizing on server...</span>
+                                </div>
+                                <span className="text-[10px] text-zinc-400 leading-normal max-w-xs">
+                                  Deriving chalkboard video with voiceover. Automatically checks for updates — you can safely leave this page.
+                                </span>
                               </div>
                             ) : (
                               <div className="text-xs text-red-400 font-medium">Derivation Failed</div>
