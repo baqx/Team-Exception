@@ -16,7 +16,7 @@ import {
   FilmStrip,
   PencilSimpleLine
 } from "@phosphor-icons/react";
-import { DEMO_LESSON_THEVENIN } from "@/lib/mock-data";
+import { DEMO_LESSON_ELEVATOR } from "@/lib/mock-data";
 import { GeneratedDemoLesson } from "@/lib/types";
 import { MathTex, FormattedChalkContent } from "@/components/math-tex";
 import { motion } from "framer-motion";
@@ -35,9 +35,9 @@ export function InteractiveDemo({ customLesson, videoUrl }: InteractiveDemoProps
   const [playerMode, setPlayerMode] = useState<"video" | "stroke">("video");
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const lesson = customLesson || DEMO_LESSON_THEVENIN;
-  const currentStep = lesson.steps[Math.min(activeStepIndex, lesson.steps.length - 1)] || DEMO_LESSON_THEVENIN.steps[0];
-  const effectiveVideoUrl = videoUrl || "/demo_lesson.mp4";
+  const lesson = customLesson || DEMO_LESSON_ELEVATOR;
+  const currentStep = lesson.steps[Math.min(activeStepIndex, lesson.steps.length - 1)] || DEMO_LESSON_ELEVATOR.steps[0];
+  const effectiveVideoUrl = videoUrl || "https://res.cloudinary.com/dzbruqmmb/video/upload/v1792766925/chalkka_lessons/lesson_0c0b9730-696.mp4";
 
   // Playback timer & auto-advance
   useEffect(() => {
@@ -98,13 +98,13 @@ export function InteractiveDemo({ customLesson, videoUrl }: InteractiveDemoProps
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-xs font-semibold text-zinc-800 mb-4">
             <GraduationCap size={15} weight="fill" className="text-zinc-900" />
-            <span>{lesson.conceptDetected ? `Concept: ${lesson.conceptDetected}` : "Interactive Lesson Player"}</span>
+            <span>✦ Newton&apos;s Second Law and Normal Force</span>
           </div>
           <h2 className="font-bold text-3xl sm:text-4xl text-[#09090B] tracking-tight">
-            {lesson.title}
+            Apparent Weight in an Accelerating Elevator
           </h2>
-          <p className="mt-3 text-base text-[#52525B]">
-            Experience the step-by-step chalkboard derivation with natural classroom narration.
+          <p className="mt-3 text-xs sm:text-sm text-[#52525B] font-mono bg-zinc-50 border border-zinc-200/80 rounded-xl px-4 py-2.5 max-w-xl mx-auto shadow-2xs">
+            &ldquo;Teach me Motion in an elevator in terms of g, weight and f and a with diagrams&rdquo;
           </p>
 
           {/* Mode Selector */}

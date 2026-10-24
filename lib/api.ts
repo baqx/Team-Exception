@@ -45,12 +45,13 @@ export interface StartGenerationResult {
 }
 
 /**
- * Initiates video generation job with problem query, subject, length, optional attachment, and optional userId.
+ * Initiates video generation job with problem query, subject, length, voice, optional attachment, and optional userId.
  */
 export async function startGenerationJob(payload: {
   query: string;
   subject?: string;
   length?: string;
+  voice?: string;
   file?: File | null;
   userId?: string;
 }): Promise<StartGenerationResult> {
@@ -58,6 +59,9 @@ export async function startGenerationJob(payload: {
   formData.append("query", payload.query);
   formData.append("subject", payload.subject || "auto");
   formData.append("length", payload.length || "standard");
+  if (payload.voice) {
+    formData.append("voice", payload.voice);
+  }
   if (payload.file) {
     formData.append("file", payload.file);
   }
@@ -76,6 +80,21 @@ export async function startGenerationJob(payload: {
   }
 
   return res.json();
+}
+
+/**
+ * Fetches available tutor voices from backend
+ */
+export async function fetchAvailableVoices() {
+  try {
+    const res = await fetch(`${API_BASE}/voices`);
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn("Could not fetch voices from API, using local catalog:", err);
+  }
+  return null;
 }
 
 /**

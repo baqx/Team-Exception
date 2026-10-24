@@ -12,6 +12,7 @@ async def start_generation(
     query: str = Form(..., description="Problem statement or student question"),
     subject: str = Form("general", description="Academic discipline"),
     length: str = Form("standard", description="Video length: short (~3m), standard (~5m), detailed (~8m)"),
+    voice: Optional[str] = Form("edge:en-US-ChristopherNeural", description="Voice ID or tutor accent"),
     file: Optional[UploadFile] = File(None, description="Optional photo or PDF of assignment, lecture notes, textbook, or diagram (PNG, JPG, WebP, PDF)"),
     user_id: Optional[str] = Form(None, description="Optional authenticated user ID for credit deduction & history tracking"),
 ):
@@ -32,6 +33,7 @@ async def start_generation(
 
     job_id = str(uuid.uuid4())[:12]
     clean_subject = (subject or "").strip() or "general"
+    clean_voice = (voice or "edge:en-US-ChristopherNeural").strip()
 
     # Map length string to target seconds
     duration_map = {
@@ -67,6 +69,7 @@ async def start_generation(
         query=query,
         subject=clean_subject,
         target_duration_sec=target_duration_sec,
+        voice=clean_voice,
         image_bytes=image_bytes,
         image_mime=image_mime,
         user_id=clean_user_id,

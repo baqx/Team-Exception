@@ -28,7 +28,8 @@ import {
   VideoCamera,
   FilePdf,
   Image as ImageIcon,
-  Flask
+  Flask,
+  SpeakerHigh
 } from "@phosphor-icons/react";
 import { useAuth } from "@/lib/auth-context";
 import { 
@@ -49,6 +50,100 @@ const SUBJECT_OPTIONS: { id: SubjectId; label: string; icon: React.ElementType }
   { id: "chemistry", label: "General Chemistry", icon: Flask },
   { id: "mechanical", label: "Mechanical Engineering", icon: BookOpen },
   { id: "computer_science", label: "Computer Science & Logic", icon: BookOpen },
+];
+
+interface TutorVoiceItem {
+  id: string;
+  name: string;
+  displayName: string;
+  provider: "edge" | "yarngpt";
+  description: string;
+  accent: string;
+  gender: "male" | "female";
+  badge: string;
+}
+
+const TUTOR_VOICES: TutorVoiceItem[] = [
+  {
+    id: "edge:en-US-ChristopherNeural",
+    name: "Christopher",
+    displayName: "Dr. Christopher",
+    provider: "edge",
+    description: "Calm, authoritative professor with deliberate lecture pacing.",
+    accent: "Global Academic (US)",
+    gender: "male",
+    badge: "Standard",
+  },
+  {
+    id: "yarngpt:idera",
+    name: "idera",
+    displayName: "Idera",
+    provider: "yarngpt",
+    description: "Melodic, gentle, and patient step-by-step guidance.",
+    accent: "Nigerian English",
+    gender: "female",
+    badge: "YarnGPT AI",
+  },
+  {
+    id: "yarngpt:emma",
+    name: "emma",
+    displayName: "Prof. Emma",
+    provider: "yarngpt",
+    description: "Authoritative, deep resonance — classic senior lecturer cadence.",
+    accent: "Nigerian English",
+    gender: "male",
+    badge: "Senior Scholar",
+  },
+  {
+    id: "yarngpt:umar",
+    name: "umar",
+    displayName: "Umar",
+    provider: "yarngpt",
+    description: "Calm, clear, and structured derivation rhythm.",
+    accent: "Nigerian English",
+    gender: "male",
+    badge: "YarnGPT AI",
+  },
+  {
+    id: "yarngpt:chinenye",
+    name: "chinenye",
+    displayName: "Chinenye",
+    provider: "yarngpt",
+    description: "Warm, engaging, and highly relatable campus tutor.",
+    accent: "Nigerian English",
+    gender: "female",
+    badge: "Campus Mentor",
+  },
+  {
+    id: "yarngpt:remi",
+    name: "remi",
+    displayName: "Remi",
+    provider: "yarngpt",
+    description: "Melodious, warm, and encouraging voice.",
+    accent: "Nigerian English",
+    gender: "female",
+    badge: "YarnGPT AI",
+  },
+  {
+    id: "yarngpt:nonso",
+    name: "nonso",
+    displayName: "Nonso",
+    provider: "yarngpt",
+    description: "Bold, resonant, confident classroom tone.",
+    accent: "Nigerian English",
+    gender: "male",
+    badge: "YarnGPT AI",
+  },
+  {
+    id: "yarngpt:osagie",
+    name: "osagie",
+    displayName: "Osagie",
+    provider: "yarngpt",
+    description: "Smooth, articulate, and steady delivery.",
+    accent: "Nigerian English",
+    gender: "male",
+    badge: "YarnGPT AI",
+  },
 ];
 
 const pageContainerVariants = {
@@ -122,6 +217,8 @@ function DashboardContent() {
   const [query, setQuery] = useState(initialQuery);
   const [selectedSubject, setSelectedSubject] = useState<SubjectId>(initialSubject);
   const [selectedLength, setSelectedLength] = useState<VideoLength>("standard");
+  const [selectedVoice, setSelectedVoice] = useState<string>("edge:en-US-ChristopherNeural");
+  const [voiceFilter, setVoiceFilter] = useState<"all" | "yarngpt" | "edge">("all");
   const [attachment, setAttachment] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -289,6 +386,7 @@ function DashboardContent() {
         query: effectiveQuery || "Solve the attached assignment problem step-by-step.",
         subject: "auto",
         length: selectedLength,
+        voice: selectedVoice,
         file: selectedFile,
         userId: user.id,
       });
@@ -842,6 +940,107 @@ function DashboardContent() {
                               </div>
                             </div>
                           )}
+                        </div>
+
+                        {/* Tutor Voice & Accent Selection (Edge-TTS & YarnGPT) */}
+                        <div className="pt-2 border-t border-[#F4F4F5]">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <div>
+                              <label className="flex items-center gap-2 text-xs uppercase font-semibold tracking-wider text-[#52525B]">
+                                <SpeakerHigh size={16} className="text-[#09090B]" />
+                                <span>Tutor Voice & Pedagogical Accent</span>
+                              </label>
+                              <p className="text-[11px] text-[#71717A] mt-0.5">
+                                Select between global academic cadence and authentic African voices powered by YarnGPT.
+                              </p>
+                            </div>
+
+                            {/* Voice Filter Chips */}
+                            <div className="inline-flex p-1 bg-zinc-100 rounded-lg text-[11px] font-medium border border-zinc-200/60 self-start sm:self-auto">
+                              <button
+                                type="button"
+                                onClick={() => setVoiceFilter("all")}
+                                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                                  voiceFilter === "all" ? "bg-white text-zinc-900 shadow-xs font-semibold" : "text-zinc-600 hover:text-zinc-900"
+                                }`}
+                              >
+                                All ({TUTOR_VOICES.length})
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setVoiceFilter("yarngpt")}
+                                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer inline-flex items-center gap-1 ${
+                                  voiceFilter === "yarngpt" ? "bg-white text-zinc-900 shadow-xs font-semibold" : "text-zinc-600 hover:text-zinc-900"
+                                }`}
+                              >
+                                <span>🇳🇬 African (YarnGPT)</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setVoiceFilter("edge")}
+                                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer inline-flex items-center gap-1 ${
+                                  voiceFilter === "edge" ? "bg-white text-zinc-900 shadow-xs font-semibold" : "text-zinc-600 hover:text-zinc-900"
+                                }`}
+                              >
+                                <span>🎓 Global</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Voice Cards Grid */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                            {TUTOR_VOICES.filter((v) => voiceFilter === "all" || v.provider === voiceFilter).map((v) => {
+                              const isSelected = selectedVoice === v.id;
+                              return (
+                                <button
+                                  key={v.id}
+                                  type="button"
+                                  onClick={() => setSelectedVoice(v.id)}
+                                  className={`p-3 rounded-xl border text-left transition-all cursor-pointer relative flex flex-col justify-between ${
+                                    isSelected
+                                      ? "bg-[#09090B] text-white border-[#09090B] shadow-xs ring-1 ring-[#09090B]"
+                                      : "bg-white text-[#52525B] border-[#E4E4E7] hover:border-zinc-300 hover:bg-[#FAFAFA]"
+                                  }`}
+                                >
+                                  <div>
+                                    <div className="flex items-center justify-between gap-1.5 mb-1.5">
+                                      <span className={`text-xs font-bold truncate ${isSelected ? "text-white" : "text-zinc-900"}`}>
+                                        {v.displayName}
+                                      </span>
+                                      <span
+                                        className={`text-[9px] px-1.5 py-0.5 rounded font-medium shrink-0 ${
+                                          isSelected
+                                            ? "bg-zinc-800 text-zinc-200"
+                                            : v.provider === "yarngpt"
+                                            ? "bg-amber-50 text-amber-900 border border-amber-200/70"
+                                            : "bg-zinc-100 text-zinc-600 border border-zinc-200"
+                                        }`}
+                                      >
+                                        {v.badge}
+                                      </span>
+                                    </div>
+                                    <div className={`text-[10px] font-medium mb-1 ${isSelected ? "text-zinc-300" : "text-zinc-700"}`}>
+                                      {v.accent} • {v.gender === "male" ? "Male" : "Female"}
+                                    </div>
+                                    <p className={`text-[11px] leading-relaxed line-clamp-2 ${isSelected ? "text-zinc-400" : "text-zinc-500"}`}>
+                                      {v.description}
+                                    </p>
+                                  </div>
+
+                                  {isSelected && (
+                                    <div className="mt-2.5 pt-2 border-t border-zinc-800/80 flex items-center justify-between text-[10px] text-zinc-300">
+                                      <span className="font-semibold text-emerald-400 flex items-center gap-1">
+                                        <CheckCircle size={12} weight="fill" /> Selected
+                                      </span>
+                                      <span className="text-[9px] text-zinc-400 font-mono">
+                                        {v.provider === "yarngpt" ? "YarnGPT" : "Edge-TTS"}
+                                      </span>
+                                    </div>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
 
                         {/* Lesson Duration Setting */}

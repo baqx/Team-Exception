@@ -33,6 +33,9 @@ class Settings(BaseSettings):
 
     # Audio / TTS Configuration
     EDGE_TTS_VOICE: str = "en-US-ChristopherNeural"  # Calm, authoritative academic voice
+    YARNGPT_API_KEY: str = ""
+    YARNGPT_BASE_URL: str = "https://api.yarngpt.ai"
+    YARNGPT_DEFAULT_VOICE: str = "idera"
     GOOGLE_APPLICATION_CREDENTIALS: str = ""
 
     # Storage: Cloudinary

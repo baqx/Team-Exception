@@ -22,6 +22,7 @@ class VideoGenerationWorker:
         query: str,
         subject: str,
         target_duration_sec: int,
+        voice: Optional[str] = None,
         image_bytes: Optional[bytes] = None,
         image_mime: Optional[str] = None,
         user_id: Optional[str] = None,
@@ -58,6 +59,7 @@ class VideoGenerationWorker:
                 await tts.synthesize_scene_audio(
                     script=scene.spoken_script,
                     output_filepath=audio_path,
+                    voice_id=voice,
                 )
                 scene_audio_paths.append(audio_path)
 
@@ -131,6 +133,7 @@ class VideoGenerationWorker:
         job_id: str,
         step_number: int,
         focus_angle: str = "",
+        voice: Optional[str] = None,
     ):
         job_dir = os.path.join(self.work_dir, job_id)
         if job_id not in jobs or not jobs[job_id].lesson_plan:
@@ -155,6 +158,7 @@ class VideoGenerationWorker:
             await tts.synthesize_scene_audio(
                 script=scene.spoken_script,
                 output_filepath=audio_path,
+                voice_id=voice,
             )
 
             # Re-render scene clips

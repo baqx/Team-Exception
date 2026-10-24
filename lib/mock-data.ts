@@ -45,6 +45,92 @@ export const SUBJECT_OPTIONS: SubjectOption[] = [
   },
 ];
 
+export const DEMO_LESSON_ELEVATOR: GeneratedDemoLesson = {
+  id: "elevator-apparent-weight-01",
+  title: "Apparent Weight in an Accelerating Elevator",
+  subject: "Classical Mechanics & Physics",
+  targetEquation: "F_N = m(g \\pm a) = W \\left(1 \\pm \\frac{a}{g}\\right)",
+  estimatedDuration: "3 min 45 sec",
+  conceptDetected: "Newton's Second Law and Normal Force",
+  prerequisites: [
+    "Newton's Second Law (\\sum F = ma)",
+    "Free-Body Diagrams (Normal Force vs True Gravity)",
+    "Frame of Reference & Coordinate Conventions"
+  ],
+  steps: [
+    {
+      id: 1,
+      title: "Foundational Gap: What Does a Scale Actually Measure?",
+      duration: "0:50",
+      category: "prerequisite",
+      boardContent: [
+        "True Weight ($W$): The gravitational pull of the Earth on mass $m$: $W = mg$ (points downward).",
+        "Normal Force ($F_N$): The contact force the scale floor exerts upward on your feet.",
+        "Pedagogical Truth: A bathroom scale NEVER measures your mass or gravity directly!",
+        "A scale only measures the normal contact force: $\\text{Scale Reading} = F_N$."
+      ],
+      spokenScript: "Before we solve any equations, let's diagnose the foundational gap that trips up nearly every physics student: a scale does not measure gravity directly. It only measures the upward normal contact force it exerts on your feet to support you.",
+      latexSnippets: [
+        "W = mg",
+        "\\text{Scale Reading} = F_N"
+      ]
+    },
+    {
+      id: 2,
+      title: "Case 1: Elevator Accelerating Upward (+a)",
+      duration: "1:15",
+      category: "concept",
+      boardContent: [
+        "Coordinate convention: Define upward direction as positive ($+y$).",
+        "Newton's Second Law: $\\sum F_y = F_N - mg = ma$",
+        "Solve for Normal Force: $F_N = mg + ma = m(g + a)$",
+        "Apparent Weight Ratio: $\\boxed{F_N = W\\left(1 + \\frac{a}{g}\\right) > W}$",
+        "Physical Sensation: Floor presses upward harder — you feel distinctly HEAVIER."
+      ],
+      spokenScript: "When the elevator accelerates upward, the floor must not only counteract gravity, but also provide the net upward force to accelerate your mass. Setting sum of forces equal to m a gives F_N equals m times g plus a. The scale reading surges, and you feel pressed into the floor.",
+      latexSnippets: [
+        "\\sum F_y = F_N - mg = ma",
+        "\\boxed{F_N = m(g + a)}"
+      ]
+    },
+    {
+      id: 3,
+      title: "Case 2: Elevator Accelerating Downward (-a) & Free Fall",
+      duration: "1:10",
+      category: "solution",
+      boardContent: [
+        "Downward Acceleration: Acceleration vector points down ($-a$).",
+        "Newton's Equation: $F_N - mg = -ma \\implies F_N = m(g - a)$",
+        "Apparent Weight: $\\boxed{F_N = W\\left(1 - \\frac{a}{g}\\right) < W}$ (You feel LIGHTER).",
+        "Extreme Case (Cable snaps, Free Fall $a = g$): $F_N = m(g - g) = 0\\text{ N}$",
+        "Apparent Weightlessness: Scale drops to 0, even though gravity $mg$ is still fully present!"
+      ],
+      spokenScript: "Now consider accelerating downward. The elevator floor drops away beneath you. Rearranging gives F_N equals m times g minus a. You feel lighter. And in the catastrophic limit where the cable snaps and a equals g, the normal force drops to exactly zero. You float in apparent weightlessness.",
+      latexSnippets: [
+        "F_N = m(g - a)",
+        "\\boxed{\\text{Free Fall: } F_N = 0\\text{ N}}"
+      ]
+    },
+    {
+      id: 4,
+      title: "Summary: The Universal Apparent Weight Formula",
+      duration: "0:30",
+      category: "verification",
+      boardContent: [
+        "Universal Elevator Equation: $\\boxed{F_N = m(g \\pm a)}$",
+        "• Moving with constant velocity ($a = 0$): Scale reads true weight $F_N = mg$.",
+        "• Accelerating upward ($+a$): Apparent weight increases ($F_N > mg$).",
+        "• Accelerating downward ($-a$): Apparent weight decreases ($F_N < mg$)."
+      ],
+      spokenScript: "In summary: speed does not change your weight—only acceleration does. At constant velocity, acceleration is zero and you weigh true mg. Only when acceleration is non-zero does the scale deviate as m times g plus or minus a.",
+      latexSnippets: [
+        "\\boxed{F_N = m(g \\pm a)}",
+        "a = 0 \\implies F_N = mg"
+      ]
+    }
+  ]
+};
+
 export const DEMO_LESSON_THEVENIN: GeneratedDemoLesson = {
   id: "thevenin-circuit-01",
   title: "Thevenin Equivalent of a Bridge Network",

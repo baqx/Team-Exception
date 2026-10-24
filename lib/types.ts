@@ -20,9 +20,22 @@ export interface ProblemGenerationRequest {
   query: string;
   subject: SubjectId;
   length: VideoLength;
+  voice?: string;
   hasAttachment?: boolean;
   attachmentName?: string;
   userId?: string;
+}
+
+export interface TutorVoiceOption {
+  id: string;
+  voiceName: string;
+  provider: "edge" | "yarngpt";
+  displayName: string;
+  description: string;
+  accent: string;
+  gender: "male" | "female";
+  badge?: string;
+  isDefault?: boolean;
 }
 
 export interface LessonStep {
