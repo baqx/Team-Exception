@@ -10,10 +10,11 @@ STANDARD_EDGE_VOICES: List[Dict[str, Any]] = [
         "voice_name": "Christopher",
         "provider": "edge",
         "display_name": "Dr. Christopher",
-        "description": "Calm, authoritative professor with deliberate lecture pacing.",
+        "description": "Calm, authoritative professor with deliberate lecture pacing. (English only)",
         "accent": "Global Academic (US)",
         "gender": "male",
-        "badge": "Standard",
+        "badge": "English Only",
+        "supported_languages": ["en"],
         "is_default": True
     },
     {
@@ -21,10 +22,11 @@ STANDARD_EDGE_VOICES: List[Dict[str, Any]] = [
         "voice_name": "Jenny",
         "provider": "edge",
         "display_name": "Prof. Jenny",
-        "description": "Clear, friendly, and structured academic delivery.",
+        "description": "Clear, friendly, and structured academic delivery. (English only)",
         "accent": "Global Academic (US)",
         "gender": "female",
-        "badge": "Standard",
+        "badge": "English Only",
+        "supported_languages": ["en"],
         "is_default": False
     }
 ]

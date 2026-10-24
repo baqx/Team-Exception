@@ -70,10 +70,10 @@ const TUTOR_VOICES: TutorVoiceItem[] = [
     name: "Christopher",
     displayName: "Dr. Christopher",
     provider: "edge",
-    description: "Calm, authoritative professor with deliberate lecture pacing.",
+    description: "Calm, authoritative professor with deliberate lecture pacing. (English only)",
     accent: "Global Academic (US)",
     gender: "male",
-    badge: "Standard",
+    badge: "English Only",
   },
   {
     id: "yarngpt:idera",
@@ -436,11 +436,16 @@ function DashboardContent() {
     setGenerationStage("Connecting to Chalkka pipeline...");
 
     try {
+      // Dr. Christopher only speaks English; auto-route to authentic African voice if non-English dialect is selected
+      const effectiveVoice = (selectedLanguage !== "en" && selectedVoice.startsWith("edge:"))
+        ? "yarngpt:idera"
+        : selectedVoice;
+
       const genResult = await startGenerationJob({
         query: effectiveQuery || "Solve the attached assignment problem step-by-step.",
         subject: "auto",
         length: selectedLength,
-        voice: selectedVoice,
+        voice: effectiveVoice,
         language: selectedLanguage,
         file: selectedFile,
         userId: user.id,
@@ -1099,36 +1104,72 @@ function DashboardContent() {
                             </div>
                           </div>
 
+                          {/* Global Voice English-only Warning when non-English dialect is selected */}
+                          {voiceFilter === "edge" && selectedLanguage !== "en" && (
+                            <div className="mb-3 p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                              <div className="flex items-center gap-2">
+                                <span className="text-base shrink-0">⚠️</span>
+                                <span>
+                                  <strong>Dr. Christopher only speaks English.</strong> To use this voice, switch dialect to English or select an authentic African voice (YarnGPT) below.
+                                </span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedLanguage("en");
+                                  setSelectedVoice("edge:en-US-ChristopherNeural");
+                                }}
+                                className="px-2.5 py-1 rounded-lg bg-amber-900 text-white font-semibold text-[11px] hover:bg-black transition-colors self-start sm:self-auto cursor-pointer shrink-0"
+                              >
+                                Switch to English & Select
+                              </button>
+                            </div>
+                          )}
+
                           {/* Voice Cards Grid */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                             {TUTOR_VOICES.filter((v) => voiceFilter === "all" || v.provider === voiceFilter).map((v) => {
                               const isSelected = selectedVoice === v.id;
+                              const isEdge = v.provider === "edge";
+                              const isRestrictedForLanguage = isEdge && selectedLanguage !== "en";
+
                               return (
                                 <button
                                   key={v.id}
                                   type="button"
-                                  onClick={() => setSelectedVoice(v.id)}
+                                  onClick={() => {
+                                    if (isRestrictedForLanguage) {
+                                      setSelectedLanguage("en");
+                                      setSelectedVoice(v.id);
+                                    } else {
+                                      setSelectedVoice(v.id);
+                                    }
+                                  }}
                                   className={`p-3 rounded-xl border text-left transition-all cursor-pointer relative flex flex-col justify-between ${
                                     isSelected
                                       ? "bg-[#09090B] text-white border-[#09090B] shadow-xs ring-1 ring-[#09090B]"
+                                      : isRestrictedForLanguage
+                                      ? "bg-zinc-50/70 text-[#71717A] border-dashed border-zinc-300 hover:border-zinc-400 hover:bg-zinc-100/60"
                                       : "bg-white text-[#52525B] border-[#E4E4E7] hover:border-zinc-300 hover:bg-[#FAFAFA]"
                                   }`}
                                 >
                                   <div>
                                     <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                                      <span className={`text-xs font-bold truncate ${isSelected ? "text-white" : "text-zinc-900"}`}>
+                                      <span className={`text-xs font-bold truncate ${isSelected ? "text-white" : isRestrictedForLanguage ? "text-zinc-600" : "text-zinc-900"}`}>
                                         {v.displayName}
                                       </span>
                                       <span
                                         className={`text-[9px] px-1.5 py-0.5 rounded font-medium shrink-0 ${
                                           isSelected
                                             ? "bg-zinc-800 text-zinc-200"
+                                            : isRestrictedForLanguage
+                                            ? "bg-amber-100/80 text-amber-900 border border-amber-300/80"
                                             : v.provider === "yarngpt"
                                             ? "bg-amber-50 text-amber-900 border border-amber-200/70"
                                             : "bg-zinc-100 text-zinc-600 border border-zinc-200"
                                         }`}
                                       >
-                                        {v.badge}
+                                        {isRestrictedForLanguage ? "English Only" : v.badge}
                                       </span>
                                     </div>
                                     <div className={`text-[10px] font-medium mb-1 ${isSelected ? "text-zinc-300" : "text-zinc-700"}`}>
@@ -1138,6 +1179,15 @@ function DashboardContent() {
                                       {v.description}
                                     </p>
                                   </div>
+
+                                  {isRestrictedForLanguage && !isSelected && (
+                                    <div className="mt-2.5 pt-2 border-t border-dashed border-zinc-200 flex items-center justify-between text-[10px] text-amber-800">
+                                      <span className="font-semibold flex items-center gap-1">
+                                        <span>🌐</span> English only
+                                      </span>
+                                      <span className="underline hover:text-amber-950 font-medium">Click to switch to English</span>
+                                    </div>
+                                  )}
 
                                   {isSelected && (
                                     <div className="mt-2.5 pt-2 border-t border-zinc-800/80 flex items-center justify-between text-[10px] text-zinc-300">

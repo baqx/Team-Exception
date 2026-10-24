@@ -56,12 +56,26 @@ class VideoGenerationWorker:
 
             tts = get_tts_provider()
             scene_audio_paths = []
+
+            # Dr. Christopher (EdgeTTS) only speaks English.
+            # If the user selected a non-English dialect (pidgin, yo, ha, ig),
+            # auto-route to YarnGPT so spoken audio sounds authentic and correct.
+            effective_voice = voice
+            if language and language.lower().strip() != "en":
+                v_str = (voice or "").lower().strip()
+                if not v_str or v_str.startswith("edge:") or "christopher" in v_str or "jenny" in v_str:
+                    logger.info(
+                        f"[Voice Router] Language is '{language}' but voice is '{voice or 'default'}'. "
+                        f"Dr. Christopher only speaks English. Auto-switching to YarnGPT '{settings.YARNGPT_DEFAULT_VOICE}'."
+                    )
+                    effective_voice = f"yarngpt:{settings.YARNGPT_DEFAULT_VOICE}"
+
             for scene in lesson_plan.scenes:
                 audio_path = os.path.join(job_dir, f"audio_scene_{scene.step_number}.mp3")
                 await tts.synthesize_scene_audio(
                     script=scene.spoken_script,
                     output_filepath=audio_path,
-                    voice_id=voice,
+                    voice_id=effective_voice,
                 )
                 scene_audio_paths.append(audio_path)
 
