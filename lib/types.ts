@@ -16,11 +16,14 @@ export interface SubjectOption {
   sampleProblem: string;
 }
 
+export type TutorLanguage = "en" | "pidgin" | "yo" | "ha" | "ig";
+
 export interface ProblemGenerationRequest {
   query: string;
   subject: SubjectId;
   length: VideoLength;
   voice?: string;
+  language?: TutorLanguage;
   hasAttachment?: boolean;
   attachmentName?: string;
   userId?: string;

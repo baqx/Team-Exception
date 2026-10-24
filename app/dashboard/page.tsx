@@ -29,7 +29,8 @@ import {
   FilePdf,
   Image as ImageIcon,
   Flask,
-  SpeakerHigh
+  SpeakerHigh,
+  GlobeHemisphereWest
 } from "@phosphor-icons/react";
 import { useAuth } from "@/lib/auth-context";
 import { 
@@ -38,7 +39,7 @@ import {
   pollJobUntilFinished,
   fetchJobStatus
 } from "@/lib/api";
-import { UserJob, SubjectId, VideoLength } from "@/lib/types";
+import { UserJob, SubjectId, VideoLength, TutorLanguage } from "@/lib/types";
 import { AuthModal } from "@/components/auth-modal";
 
 type DashboardTab = "studio" | "archive" | "credits";
@@ -146,6 +147,58 @@ const TUTOR_VOICES: TutorVoiceItem[] = [
   },
 ];
 
+interface LanguageOptionItem {
+  id: TutorLanguage;
+  name: string;
+  nativeName: string;
+  flag: string;
+  badge: string;
+  description: string;
+}
+
+const LANGUAGE_OPTIONS: LanguageOptionItem[] = [
+  {
+    id: "en",
+    name: "English",
+    nativeName: "Academic English",
+    flag: "🌍",
+    badge: "Global",
+    description: "Standard, structured academic classroom English.",
+  },
+  {
+    id: "pidgin",
+    name: "Naija Pidgin",
+    nativeName: "Campus & Street-Smart",
+    flag: "🇳🇬",
+    badge: "Relatable",
+    description: "Intuitive, relatable 'no-stress' classroom explanations.",
+  },
+  {
+    id: "yo",
+    name: "Yorùbá",
+    nativeName: "Èdè Yorùbá",
+    flag: "🇳🇬",
+    badge: "Indigenous",
+    description: "Culturally fluent, deep mathematical intuition.",
+  },
+  {
+    id: "ha",
+    name: "Hausa",
+    nativeName: "Harshen Hausa",
+    flag: "🇳🇬",
+    badge: "Indigenous",
+    description: "Direct, methodical, step-by-step academic explanations.",
+  },
+  {
+    id: "ig",
+    name: "Ìgbò",
+    nativeName: "Asụsụ Ìgbò",
+    flag: "🇳🇬",
+    badge: "Indigenous",
+    description: "Expressive, engaging derivations and analogies.",
+  },
+];
+
 const pageContainerVariants = {
   initial: { opacity: 0, y: 14 },
   animate: {
@@ -218,6 +271,7 @@ function DashboardContent() {
   const [selectedSubject, setSelectedSubject] = useState<SubjectId>(initialSubject);
   const [selectedLength, setSelectedLength] = useState<VideoLength>("standard");
   const [selectedVoice, setSelectedVoice] = useState<string>("edge:en-US-ChristopherNeural");
+  const [selectedLanguage, setSelectedLanguage] = useState<TutorLanguage>("en");
   const [voiceFilter, setVoiceFilter] = useState<"all" | "yarngpt" | "edge">("all");
   const [attachment, setAttachment] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -387,6 +441,7 @@ function DashboardContent() {
         subject: "auto",
         length: selectedLength,
         voice: selectedVoice,
+        language: selectedLanguage,
         file: selectedFile,
         userId: user.id,
       });
@@ -940,6 +995,63 @@ function DashboardContent() {
                               </div>
                             </div>
                           )}
+                        </div>
+
+                        {/* Spoken Language & Vernacular Selection */}
+                        <div className="pt-2 border-t border-[#F4F4F5]">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+                            <div>
+                              <label className="flex items-center gap-2 text-xs uppercase font-semibold tracking-wider text-[#52525B]">
+                                <GlobeHemisphereWest size={16} className="text-[#09090B]" />
+                                <span>Spoken Language & Dialect</span>
+                              </label>
+                              <p className="text-[11px] text-[#71717A] mt-0.5">
+                                Formulas and chalkboard derivations remain 100% exact, while the spoken teacher narration adapts.
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                            {LANGUAGE_OPTIONS.map((lang) => {
+                              const isSelected = selectedLanguage === lang.id;
+                              return (
+                                <button
+                                  key={lang.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedLanguage(lang.id);
+                                    if (lang.id !== "en" && selectedVoice.startsWith("edge:")) {
+                                      setSelectedVoice("yarngpt:idera");
+                                    }
+                                  }}
+                                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
+                                    isSelected
+                                      ? "bg-[#09090B] text-white border-[#09090B] shadow-xs ring-1 ring-[#09090B]"
+                                      : "bg-white text-[#52525B] border-[#E4E4E7] hover:border-zinc-300 hover:bg-[#FAFAFA]"
+                                  }`}
+                                >
+                                  <div className="flex items-center justify-between gap-1 mb-1">
+                                    <span className="text-xs font-bold truncate flex items-center gap-1.5">
+                                      <span>{lang.flag}</span>
+                                      <span className={isSelected ? "text-white" : "text-zinc-900"}>{lang.name}</span>
+                                    </span>
+                                    <span
+                                      className={`text-[9px] px-1.5 py-0.5 rounded font-medium shrink-0 ${
+                                        isSelected
+                                          ? "bg-zinc-800 text-zinc-200"
+                                          : "bg-zinc-100 text-zinc-600 border border-zinc-200"
+                                      }`}
+                                    >
+                                      {lang.badge}
+                                    </span>
+                                  </div>
+                                  <div className={`text-[10px] leading-tight truncate ${isSelected ? "text-zinc-300" : "text-zinc-500"}`}>
+                                    {lang.nativeName}
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
 
                         {/* Tutor Voice & Accent Selection (Edge-TTS & YarnGPT) */}

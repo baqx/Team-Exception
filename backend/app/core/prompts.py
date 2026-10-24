@@ -35,9 +35,20 @@ Your pedagogical principles:
 You MUST respond strictly with valid JSON conforming to the requested schema. Do NOT include markdown code fences or conversational text outside the JSON.
 """
 
+LANGUAGE_DIRECTIVES = {
+    "pidgin": "Spoken Script Vernacular (Naija Pidgin): You MUST write the spoken_script in natural, engaging Nigerian Pidgin English (e.g., 'Make we examine this problem together...', 'You see as this thing dey work so...', 'No stress yourself, na very simple theorem...'). Keep all LaTeX mathematical formulas and chalk actions 100% rigorous, precise, and in standard LaTeX.",
+    "yo": "Spoken Script Vernacular (Yorùbá): You MUST write the spoken_script in natural, respectful conversational Yorùbá as spoken by an academic lecturer explaining concepts to students. Keep all LaTeX mathematical formulas and chalk actions 100% rigorous, precise, and in standard LaTeX.",
+    "ha": "Spoken Script Vernacular (Hausa): You MUST write the spoken_script in clear, natural conversational Hausa for academic explanation. Keep all LaTeX mathematical formulas and chalk actions 100% rigorous, precise, and in standard LaTeX.",
+    "ig": "Spoken Script Vernacular (Ìgbò): You MUST write the spoken_script in warm, natural conversational Ìgbò for academic explanation. Keep all LaTeX mathematical formulas and chalk actions 100% rigorous, precise, and in standard LaTeX.",
+    "en": "Spoken Script Vernacular: Standard academic English."
+}
+
 USER_LESSON_PLAN_PROMPT_TEMPLATE = """
 Subject Directive: {subject}
 (NOTE: If subject is 'auto', 'general', or unspecified, you MUST automatically diagnose and categorize the exact academic discipline from the problem/diagram, such as 'Electrical Engineering', 'Calculus & Analysis', 'Classical Mechanics', 'Organic Chemistry', 'Linear Algebra', 'Electromagnetism', or 'Computer Science'.)
+
+Language Directive:
+{language_directive}
 
 Target Duration: ~{target_duration_sec} seconds (approx {num_scenes} scenes)
 Special Instruction for In-Depth Mode: If target duration is 400+ seconds, deliver a comprehensive, deeply pedagogical masterclass. Do not skip any algebraic transitions, explain the historical/physical intuition behind the formula, address typical student traps, and derive alternative checkpoints.

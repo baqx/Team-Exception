@@ -23,6 +23,7 @@ class VideoGenerationWorker:
         subject: str,
         target_duration_sec: int,
         voice: Optional[str] = None,
+        language: Optional[str] = "en",
         image_bytes: Optional[bytes] = None,
         image_mime: Optional[str] = None,
         user_id: Optional[str] = None,
@@ -44,6 +45,7 @@ class VideoGenerationWorker:
                 target_duration_sec=target_duration_sec,
                 image_bytes=image_bytes,
                 image_mime=image_mime,
+                language=language,
             )
             jobs[job_id].lesson_plan = lesson_plan
 

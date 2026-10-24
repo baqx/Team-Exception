@@ -52,6 +52,7 @@ export async function startGenerationJob(payload: {
   subject?: string;
   length?: string;
   voice?: string;
+  language?: string;
   file?: File | null;
   userId?: string;
 }): Promise<StartGenerationResult> {
@@ -61,6 +62,9 @@ export async function startGenerationJob(payload: {
   formData.append("length", payload.length || "standard");
   if (payload.voice) {
     formData.append("voice", payload.voice);
+  }
+  if (payload.language) {
+    formData.append("language", payload.language);
   }
   if (payload.file) {
     formData.append("file", payload.file);

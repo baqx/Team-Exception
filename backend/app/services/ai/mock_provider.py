@@ -17,6 +17,7 @@ class MockAIProvider(BaseAIProvider):
         target_duration_sec: int = 240,
         image_bytes: Optional[bytes] = None,
         image_mime: Optional[str] = None,
+        language: Optional[str] = "en",
     ) -> LessonPlan:
         q = query.lower()
 

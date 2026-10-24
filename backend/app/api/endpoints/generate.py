@@ -13,6 +13,7 @@ async def start_generation(
     subject: str = Form("general", description="Academic discipline"),
     length: str = Form("standard", description="Video length: short (~3m), standard (~5m), detailed (~8m)"),
     voice: Optional[str] = Form("edge:en-US-ChristopherNeural", description="Voice ID or tutor accent"),
+    language: Optional[str] = Form("en", description="Instructional dialect or language: en, pidgin, yo, ha, ig"),
     file: Optional[UploadFile] = File(None, description="Optional photo or PDF of assignment, lecture notes, textbook, or diagram (PNG, JPG, WebP, PDF)"),
     user_id: Optional[str] = Form(None, description="Optional authenticated user ID for credit deduction & history tracking"),
 ):
@@ -34,6 +35,7 @@ async def start_generation(
     job_id = str(uuid.uuid4())[:12]
     clean_subject = (subject or "").strip() or "general"
     clean_voice = (voice or "edge:en-US-ChristopherNeural").strip()
+    clean_language = (language or "en").strip().lower()
 
     # Map length string to target seconds
     duration_map = {
@@ -70,6 +72,7 @@ async def start_generation(
         subject=clean_subject,
         target_duration_sec=target_duration_sec,
         voice=clean_voice,
+        language=clean_language,
         image_bytes=image_bytes,
         image_mime=image_mime,
         user_id=clean_user_id,

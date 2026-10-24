@@ -16,6 +16,7 @@ class BaseAIProvider(ABC):
         target_duration_sec: int = 240,
         image_bytes: Optional[bytes] = None,
         image_mime: Optional[str] = None,
+        language: Optional[str] = "en",
     ) -> LessonPlan:
         """
         Analyze user query and multimodal image; return strict, validated LessonPlan.

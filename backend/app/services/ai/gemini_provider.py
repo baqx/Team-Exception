@@ -4,7 +4,7 @@ import google.generativeai as genai
 from app.config import settings
 from app.core.models import LessonPlan
 from app.core.providers.ai_base import BaseAIProvider
-from app.core.prompts import ORGANIC_CHEMISTRY_TUTOR_SYSTEM_PROMPT, USER_LESSON_PLAN_PROMPT_TEMPLATE
+from app.core.prompts import ORGANIC_CHEMISTRY_TUTOR_SYSTEM_PROMPT, USER_LESSON_PLAN_PROMPT_TEMPLATE, LANGUAGE_DIRECTIVES
 
 class GeminiProvider(BaseAIProvider):
     def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None):
@@ -20,6 +20,7 @@ class GeminiProvider(BaseAIProvider):
         target_duration_sec: int = 240,
         image_bytes: Optional[bytes] = None,
         image_mime: Optional[str] = None,
+        language: Optional[str] = "en",
     ) -> LessonPlan:
         if not self.api_key:
             raise ValueError("GOOGLE_GENERATIVE_AI_API_KEY is not set. Please provide a key or switch AI_PROVIDER='mock'.")
@@ -31,9 +32,12 @@ class GeminiProvider(BaseAIProvider):
         )
 
         effective_subject = subject if subject and subject != "general" else "auto"
+        effective_lang = (language or "en").lower().strip()
+        lang_directive = LANGUAGE_DIRECTIVES.get(effective_lang, LANGUAGE_DIRECTIVES["en"])
         num_scenes = max(3, min(8, target_duration_sec // 60))
         prompt_text = USER_LESSON_PLAN_PROMPT_TEMPLATE.format(
             subject=effective_subject,
+            language_directive=lang_directive,
             target_duration_sec=target_duration_sec,
             num_scenes=num_scenes,
             query=query,
@@ -69,4 +73,5 @@ class GeminiProvider(BaseAIProvider):
                 target_duration_sec=target_duration_sec,
                 image_bytes=image_bytes,
                 image_mime=image_mime,
+                language=language,
             )
